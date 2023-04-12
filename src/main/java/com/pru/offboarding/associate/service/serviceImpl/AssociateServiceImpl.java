@@ -75,6 +75,7 @@ public class AssociateServiceImpl implements AssociateService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.set("Authorization", "Bearer" + "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2NDAzMmNjYmM0NmFlMDVkOTViMWI0Y2QsdGVzdEBnbWFpbC5jb20iLCJpc3MiOiJPbmJvYXJkaW5nIFRlYW0gSUJNIFBydWRlbnRpYWwiLCJyb2xlcyI6IlJPTEVfT05CT0FSRElOR19SRVZJRVdFUiIsImlhdCI6MTY4MDIzOTM0MCwiZXhwIjoxNjgwMzI1NzQwfQ.6EWP2WTT6uX8n7PFFRZFy2Tg3UUF3rWQ9_fO5P4D-C1dnTmo7djUyep1XfpEuTLcAlGlwO2O8jkOZWtD5SH1Jg");
 		return headers;
 	}
 
@@ -85,9 +86,9 @@ public class AssociateServiceImpl implements AssociateService {
 		AssociateWithSkillTemplateVO responseTemplateVO = new AssociateWithSkillTemplateVO();
 		Associate associate = getAssociateDetails(associateId);
 		HttpEntity<String> entity = new HttpEntity<String>(restHeader());
-		// List<AssociateSkill> skills= (List<AssociateSkill>)
-		// restTemplate.getForObject(skillServiceUrl+"/pru-skill/get-skill/"+associate.getAssociateId(),
-		// AssociateSkill.class);
+//		 List<AssociateSkill> skills1= (List<AssociateSkill>)
+//		 restTemplate.getForObject(skillServiceUrl+"/pru-skill/get-skill/"+associate.getAssociateId(),
+//		 AssociateSkill.class);
 		ResponseEntity<List> skills = restTemplate.exchange(
 				skillServiceUrl + "/pru-skill/get-skill/" + associate.getAssociateId(), HttpMethod.GET, entity,
 				new ParameterizedTypeReference<List>() {

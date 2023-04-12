@@ -30,21 +30,21 @@ public class AssociateController {
 	final Logger logger= LoggerFactory.getLogger(AssociateController.class);
 	
 	@PostMapping(value = "/save-associate")
-	@PreAuthorize("hasAnyRole({'ROLE_ONBOARDING_REVIEWER','ROLE_ONBOARDING_MANAGER'})")
+	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
 	public AssociateWithSkillTemplateVO saveUser(@RequestBody AssociateWithSkillTemplateVO formData) {
 		// System.out.println(":::::::: >>>>>>"+formData);
 		return associateService.saveAssociateDetails(formData);
 	}
 
 	@GetMapping(value = "/get-associate-with-skill-details-by-id/{associateId}")
-	@PreAuthorize("hasAnyRole({'ROLE_ONBOARDING_REVIEWER','ROLE_ONBOARDING_MANAGER'})")
+	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
 	public AssociateWithSkillTemplateVO getAssociateWithSkill(@PathVariable Long associateId) {
 		
 		return associateService.getAssociateWithSkillDetails(associateId);
 	}
 	
 	@GetMapping(value = "/get-associate-details-by-id/{associateId}")
-	@PreAuthorize("hasAnyRole({'ROLE_ONBOARDING_REVIEWER','ROLE_ONBOARDING_MANAGER'})")
+	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
 	public Associate getAssociate(@PathVariable Long associateId) {
 		
 		return associateService.getAssociateDetails(associateId);
@@ -52,7 +52,7 @@ public class AssociateController {
 	
 	
 	@GetMapping(value = "/get-all-associates")
-	@PreAuthorize("hasAnyRole({'ROLE_ONBOARDING_REVIEWER','ROLE_ONBOARDING_MANAGER'})")
+	@PreAuthorize("hasAnyRole({'ROLE_ASSOCIATE','ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
 	public List<Associate> getAllAssociates() {
 		
 		return associateService.getAllAssociateDetails();
@@ -60,14 +60,14 @@ public class AssociateController {
 	
 	
 	@PostMapping(value = "/search-associate")
-	@PreAuthorize("hasAnyRole({'ROLE_ONBOARDING_REVIEWER','ROLE_ONBOARDING_MANAGER'})")
+	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
 	public List<Associate> searchAssociate(@RequestBody SearchAssociateRequest formData) {
 		
 		return associateService.searchAssociateDetails(formData);
 	}
 	
 	@GetMapping(value = "/search-associate-bydate/{date}")
-	@PreAuthorize("hasAnyRole({'ROLE_ONBOARDING_REVIEWER','ROLE_ONBOARDING_MANAGER'})")
+	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
 	public List<Associate> searchAssociateByDate(@PathVariable(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
 		return associateService.searchAssociateDetailsByDate(date);
 	}
