@@ -1,0 +1,20 @@
+server:
+  port: 9092
+  
+spring:
+  data:
+    mongodb:
+      uri: mongodb://${IPDB}:27017/onboardstore
+      database: onboardstore
+      ssl:
+        enabled: false
+        invalidHostNameAllowed: true
+        trust-store: /rds-truststore.jks
+        trust-store-password: mnbvcxz
+  application:
+    name: ASSOCIATE-SERVICE
+  config:
+    import: optional:configserver:http://${CNF}:9296/
+        
+logging:
+  file.name: /tmp/certs/logger/associate-service-app.log
