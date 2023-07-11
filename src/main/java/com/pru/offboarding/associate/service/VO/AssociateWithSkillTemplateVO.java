@@ -5,6 +5,8 @@ import java.util.List;
 import com.pru.offboarding.associate.service.entity.Associate;
 import com.pru.offboarding.associate.service.entity.AssociateSkill;
 
+
+
 public class AssociateWithSkillTemplateVO {
 
 	private Associate associate;

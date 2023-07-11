@@ -10,14 +10,19 @@ import com.pru.offboarding.associate.service.model.SearchAssociateRequest;
 import com.pru.offboarding.associate.service.model.SkillExcelExport;
 
 
+
+
 public interface AssociateService {
 
+	public Associate newAssociateDetails(Associate formData);
 	
 	public AssociateWithSkillTemplateVO saveAssociateDetails(AssociateWithSkillTemplateVO formData);
 
-	public AssociateWithSkillTemplateVO getAssociateWithSkillDetails(Long associateId);
+	public boolean saveAllAssociateDetails(List<AssociateWithSkillTemplateVO> newAssociates);
+	
+//	public AssociateWithSkillTemplateVO getAssociateWithSkillDetails(Long long1);
 
-	public Associate getAssociateDetails(Long associateId);
+	public Associate getAssociateDetails(String associateId);
 
 	public List<Associate> searchAssociateDetails(SearchAssociateRequest formData);
 
@@ -32,6 +37,8 @@ public interface AssociateService {
 	public Map<String, List<SkillExcelExport>> getlistAssociateSkillDetailsForExcelExport();
 
 	public List<Associate> getAllAssociateDetails();
+
+	public AssociateWithSkillTemplateVO getAssociateWithSkillDetails(String associateId);
 
 	
 }

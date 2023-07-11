@@ -4,17 +4,17 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://mongoonbrd:mongoonbrd@docdb-2023-06-20-09-20-24.c3wdt2zlxzwq.us-east-1.docdb.amazonaws.com:27017/?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false
-      database : test
+      uri: mongodb://${IPDB}:27017/offboardstore
+      database: offboardstore
       ssl:
-        enabled: true
+        enabled: false
         invalidHostNameAllowed: true
         trust-store: /rds-truststore.jks
         trust-store-password: mnbvcxz
   application:
     name: ASSOCIATE-SERVICE
   config:
-    import: optional:configserver:http://localhost:9296/
+    import: optional:configserver:http://${CNF}:9296/
         
 logging:
   file.name: /tmp/certs/logger/associate-service-app.log
