@@ -1,52 +1,26 @@
 package com.pru.offboarding.associate.service.jwt;
 
-import java.net.URI;
-import java.util.Map;
-import java.util.Optional;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.security.Key;
+import java.util.Map;
 
 @Service
 public class JwtTokenUtilService {
 
-	@Autowired
-	private RestTemplate restTemplate;
-	
-	@Autowired
-	private DiscoveryClient discoveryClient;
-	
-	private String getUrl(){
-		Optional<String> os = this.discoveryClient.getServices().stream().filter(s->s.startsWith("token")).findFirst();
-		 String url="http://"+os.get().toUpperCase();
-		 return url;
-	}
-	
-	public boolean validateToken(String token) {
-		URI uri=URI.create(getUrl()+"/token/validate-token");
-		HttpHeaders headers=new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<String> entity=new HttpEntity<String>(token.trim(), headers);
-		Boolean valid = restTemplate.postForObject(uri, entity, Boolean.class);
-		return valid;
-	}
-	
+	@Value("${app.jwt.secret}")
+	private String SECRET_KEY;
+
 	public User getUserDetails(String token){
-		URI uri=URI.create(getUrl()+"/token/get-claim");
-		HttpHeaders headers=new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<String> entity=new HttpEntity<String>(token.trim(), headers);
-		Map<String, Object> userDetailsMap = restTemplate.postForObject(uri, entity, Map.class);
-		
+		Claims claims = Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
 		User userDetails = new User();
-		for (Map.Entry<String, Object> entry : userDetailsMap.entrySet()) {
+		for (Map.Entry<String, Object> entry : claims.entrySet()) {
 			String key = entry.getKey();
 			Object val = entry.getValue();
 			if(key.equalsIgnoreCase("sub")) {
@@ -67,5 +41,9 @@ public class JwtTokenUtilService {
 		}
 		
 		return userDetails;
+	}
+	private Key getSignKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+		return Keys.hmacShaKeyFor(keyBytes);
 	}
 }

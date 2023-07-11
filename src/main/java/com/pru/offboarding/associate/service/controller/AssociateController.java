@@ -1,24 +1,21 @@
 package com.pru.offboarding.associate.service.controller;
 
-import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.pru.offboarding.associate.service.VO.AssociateWithSkillTemplateVO;
 import com.pru.offboarding.associate.service.entity.Associate;
 import com.pru.offboarding.associate.service.model.SearchAssociateRequest;
 import com.pru.offboarding.associate.service.service.AssociateService;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/pru-associate")
@@ -29,6 +26,13 @@ public class AssociateController {
 	
 	final Logger logger= LoggerFactory.getLogger(AssociateController.class);
 	
+	@PostMapping(value = "/new-associate")
+	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
+	public Associate newUser(@RequestBody Associate formData) {
+		// System.out.println(":::::::: >>>>>>"+formData);
+		return associateService.newAssociateDetails(formData);
+	}
+	
 	@PostMapping(value = "/save-associate")
 	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
 	public AssociateWithSkillTemplateVO saveUser(@RequestBody AssociateWithSkillTemplateVO formData) {
@@ -36,26 +40,38 @@ public class AssociateController {
 		return associateService.saveAssociateDetails(formData);
 	}
 
+	@PostMapping(value = "/save-all-associate")
+	public boolean saveUser(@RequestBody List<AssociateWithSkillTemplateVO> newAssociates) {
+		return associateService.saveAllAssociateDetails(newAssociates);
+	}
+	
 	@GetMapping(value = "/get-associate-with-skill-details-by-id/{associateId}")
 	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
-	public AssociateWithSkillTemplateVO getAssociateWithSkill(@PathVariable Long associateId) {
+	public AssociateWithSkillTemplateVO getAssociateWithSkill(@PathVariable String associateId) {
 		
 		return associateService.getAssociateWithSkillDetails(associateId);
 	}
 	
 	@GetMapping(value = "/get-associate-details-by-id/{associateId}")
 	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
-	public Associate getAssociate(@PathVariable Long associateId) {
+	public Associate getAssociate(@PathVariable String associateId) {
 		
 		return associateService.getAssociateDetails(associateId);
 	}
 	
 	
 	@GetMapping(value = "/get-all-associates")
-	@PreAuthorize("hasAnyRole({'ROLE_ASSOCIATE','ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
-	public List<Associate> getAllAssociates() {
+	@PreAuthorize("hasAnyRole({'ROLE_OFFBOARDING_REVIEWER','ROLE_OFFBOARDING_MANAGER'})")
+	public List<AssociateWithSkillTemplateVO> getAllAssociates() {
+		List<Associate> associates = associateService.getAllAssociateDetails();
+		logger.info("associate get all "+associates);
+		List<AssociateWithSkillTemplateVO> asw=new ArrayList<>();
 		
-		return associateService.getAllAssociateDetails();
+		for (Associate associate : associates) {
+			AssociateWithSkillTemplateVO swvo = associateService.getAssociateWithSkillDetails(associate.getAssociateId());
+			asw.add(swvo);
+		}
+		return asw;
 	}
 	
 	

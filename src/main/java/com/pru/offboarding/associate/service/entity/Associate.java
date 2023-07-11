@@ -18,10 +18,13 @@ import lombok.NoArgsConstructor;
 public class Associate {
 
 	@Id
-	private Long associateId;
+	private String associateId;
+	
     private String associateName;
     private String ibmId;
     private Long projectId;
+    private String firstName;
+    private String lastName;
     private String engagementName;
     private String majorFunction;
     private String band;
@@ -66,4 +69,11 @@ public class Associate {
     private String planInCaseOfExtensionAmendmentRejection;
     private String activeInactive;    
    
+    public Associate(String firstName, String lastName, String ibmId, String emailIbm, String activeInactive) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ibmId = ibmId;
+        this.emailIbm = emailIbm;
+        this.activeInactive = activeInactive;
+    }
 }

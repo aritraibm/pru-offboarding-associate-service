@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 public class AssociateSkill {
 
 	@Id
-	private Long associateSkillId;
-    private Long associateId;
-    private Long skillId;
-    private String skillRating;
+	private String associateSkillId;
+	private String associateId;
+	private String skillId;
+	private String skillRating;
     
 }
